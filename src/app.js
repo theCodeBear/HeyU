@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('close', ['ionic'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -25,49 +25,57 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+  .state('login', {
+    url: '/',
+    templateUrl: 'states/login/login.html',
+    controller: 'LoginCtrl as vmLogin'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app', {
+    url: '/app',
+    abstract: true,
+    templateUrl: 'states/menu/menu.html',
+    controller: 'MenuCtrl as vmMenu'
+  })
+
+  .state('app.chat', {
+    url: '/chat',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'states/chat/chat.html',
+        controller: 'ChatCtrl as vmChat'
       }
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.accountSetup', {
+      url: '/accountSetup',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'states/accountSetup/accountSetup.html',
+          controller: 'AccountSetupCtrl as vmAccount'
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+    .state('app.profile', {
+      url: '/profile',
       views: {
         'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
+          templateUrl: 'states/profile/profile.html',
+          controller: 'ProfileCtrl as vmProfile'
         }
       }
     })
 
-  .state('app.single', {
-    url: '/playlists/:playlistId',
+  .state('app.settings', {
+    url: '/settings',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'states/settings/settings.html',
+        controller: 'SettingsCtrl as vmSettings'
       }
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/');
 });
