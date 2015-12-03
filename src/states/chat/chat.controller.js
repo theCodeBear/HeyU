@@ -10,8 +10,10 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
 
   let vmChat = this;
 
+  let chatRoom;
   let intervalTimer;
-  vmChat.tick = 600;
+  const CHAT_TIME_AMOUNT = 600;
+  vmChat.tick = CHAT_TIME_AMOUNT;
   vmChat.username = User.get();
   vmChat.distanceSelected = null;
   vmChat.chatFound = null;
@@ -23,7 +25,7 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
 
 
   Socket.on('user connected', (msg) => {
-    console.log(msg);
+    chatRoom = msg;
   });
 
   // $interval(() => {
@@ -37,7 +39,10 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
   function lookingForSomeone() {
     $timeout(() => {
       vmChat.chatFound = true;
-      intervalTimer = $interval(() => vmChat.tick--, 1000);
+      intervalTimer = $interval(() => {
+        if (vmChat.tick === 0) return ditchChat();
+        vmChat.tick--;
+      }, 1000);
     }, 3000);
   }
 
@@ -48,7 +53,7 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
   }
 
   function sendMessage(msg) {
-    let message = {user: vmChat.username, message: msg};
+    let message = {user: vmChat.username, message: msg, room: chatRoom};
     vmChat.messageHistory.push(message);
     vmChat.message = '';
     Socket.emit('message sent', message);
@@ -56,7 +61,7 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
 
   function ditchChat() {
     $interval.cancel(intervalTimer);
-    vmChat.tick = 600;
+    vmChat.tick = CHAT_TIME_AMOUNT;
     vmChat.chatFound = false;
     lookingForSomeone();
     vmChat.messageHistory = [];
