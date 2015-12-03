@@ -1,9 +1,13 @@
-<ion-view view-title="Chat">
-  <ion-header-bar>
+<ion-view view-title="{{ vmChat.tick | timer }}">
+  <!-- <ion-header-bar>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+      <button class="button button-clear">Blah</button>
     </div>
-  </ion-header-bar>
+  </ion-header-bar> -->
+  <ion-nav-buttons side='right'>
+    <button class='button button-clear'><i class='icon ion-person'></i></button>
+    <button class='button ditch-button' ng-click='vmChat.ditchChat()'>Ditch</button>
+  </ion-nav-buttons>
   <ion-content>
     <h1>Chat</h1>
     {{ vmChat.username }}
@@ -35,7 +39,6 @@
 
     <!-- Person found, chat template -->
     <div class='h2 text-center' ng-if='vmChat.chatFound'>
-      {{ vmChat.tick | timer }}
       <p> A new challenger appears </p>
       <ul>
         <li ng-repeat='message in vmChat.messageHistory' class='chat-msg' ng-class='{"text-left": !vmChat.isThisUser(message.user), "text-right": vmChat.isThisUser(message.user)}'>
