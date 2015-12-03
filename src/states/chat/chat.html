@@ -6,5 +6,37 @@
   </ion-header-bar>
   <ion-content>
     <h1>Chat</h1>
+    {{ vmChat.username }}
+
+    <!-- Select Discovery Range -->
+    <div ng-if='!vmChat.distanceSelected && !vmChat.chatFound'>
+      <h3 class='text-center'>Meet people within...</h3>
+      <div class='row'>
+        <div class='col col-33 text-center' ng-click='vmChat.selectDistance(1)'>
+          <i class='icon ion-android-walk distance-icons'></i>
+          <p>1 mile</p>
+        </div>
+        <div class='col col-33 text-center' ng-click='vmChat.selectDistance(2)'>
+          <i class='icon ion-android-bicycle distance-icons'></i>
+          <p>2 miles</p>
+        </div>
+        <div class='col col-33 text-center' ng-click='vmChat.selectDistance(5)'>
+          <i class='icon ion-android-car distance-icons'></i>
+          <p>5 miles</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading, looking for person to chat with -->
+    <div class='h2 text-center' ng-if='vmChat.distanceSelected && !vmChat.chatFound'>
+      <p>Looking for someone...</p>
+      <i class='icon ion-load-a'></i>
+    </div>
+
+    <!-- Person found, chat template -->
+    <div class='h2 text-center' ng-if='vmChat.chatFound'>
+      <p> A new challenger appears </p>
+    </div>
+
   </ion-content>
 </ion-view>
