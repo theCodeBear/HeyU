@@ -9,4 +9,4 @@ function AccountSetupCtrl() {
   let vmAccount = this;
 
 
-});
+}

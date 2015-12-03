@@ -6,7 +6,14 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('close', ['ionic'])
 
-.run(function($ionicPlatform) {
+.run(run)
+.config(config);
+
+
+
+run.$inject = ['$ionicPlatform'];
+
+function run($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,15 +27,25 @@ angular.module('close', ['ionic'])
       StatusBar.styleDefault();
     }
   });
-})
+}
 
-.config(function($stateProvider, $urlRouterProvider) {
+
+config.$inject = ['$stateProvider', '$urlRouterProvider'];
+
+function config($stateProvider, $urlRouterProvider) {
+
   $stateProvider
 
   .state('login', {
     url: '/',
     templateUrl: 'states/login/login.html',
     controller: 'LoginCtrl as vmLogin'
+  })
+
+  .state('accountSetup', {
+    url: '/accountSetup',
+    templateUrl: 'states/accountSetup/accountSetup.html',
+    controller: 'AccountSetupCtrl as vmAccount'
   })
 
   .state('app', {
@@ -48,24 +65,15 @@ angular.module('close', ['ionic'])
     }
   })
 
-  .state('app.accountSetup', {
-      url: '/accountSetup',
-      views: {
-        'menuContent': {
-          templateUrl: 'states/accountSetup/accountSetup.html',
-          controller: 'AccountSetupCtrl as vmAccount'
-        }
+  .state('app.profile', {
+    url: '/profile',
+    views: {
+      'menuContent': {
+        templateUrl: 'states/profile/profile.html',
+        controller: 'ProfileCtrl as vmProfile'
       }
-    })
-    .state('app.profile', {
-      url: '/profile',
-      views: {
-        'menuContent': {
-          templateUrl: 'states/profile/profile.html',
-          controller: 'ProfileCtrl as vmProfile'
-        }
-      }
-    })
+    }
+  })
 
   .state('app.settings', {
     url: '/settings',
@@ -76,6 +84,7 @@ angular.module('close', ['ionic'])
       }
     }
   });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/');
-});
+}

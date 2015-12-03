@@ -9,4 +9,4 @@ function SettingsCtrl() {
   let vmSettings = this;
 
 
-});
+}

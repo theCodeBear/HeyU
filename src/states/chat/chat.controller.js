@@ -9,4 +9,4 @@ function ChatCtrl() {
   let vmChat = this;
 
 
-});
+}

@@ -15,4 +15,4 @@ function MenuCtrl() {
 
   let vmMenu = this;
 
-});
+}
