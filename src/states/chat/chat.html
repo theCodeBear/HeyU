@@ -35,6 +35,7 @@
 
     <!-- Person found, chat template -->
     <div class='h2 text-center' ng-if='vmChat.chatFound'>
+      {{ vmChat.tick | timer }}
       <p> A new challenger appears </p>
       <ul>
         <li ng-repeat='message in vmChat.messageHistory' class='chat-msg' ng-class='{"text-left": !vmChat.isThisUser(message.user), "text-right": vmChat.isThisUser(message.user)}'>

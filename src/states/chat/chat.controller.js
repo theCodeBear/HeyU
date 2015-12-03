@@ -30,6 +30,8 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
     vmChat.messageHistory.push(msg);
   });
 
+  vmChat.tick = 600;
+
 
 
   function selectDistance(distance) {
@@ -37,6 +39,9 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
     Settings.setRange(distance);
     $timeout(() => {
       vmChat.chatFound = true;
+      $interval(() => {
+        vmChat.tick--;
+      }, 1000);
     }, 3000);
   }
 
