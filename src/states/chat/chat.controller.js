@@ -112,6 +112,11 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
     ditchChat(false);
   });
 
+  Socket.on('user got disconnected', () => {
+    alert('Other user was disconnected :(');
+    ditchChat(false);
+  });
+
   // runs the clock countdown
   function startChatCountdown() {
     // removeIdFromAvailableList();  -- if only end up using this when calling this function, just put this here
