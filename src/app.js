@@ -75,16 +75,6 @@ function config($stateProvider, $urlRouterProvider) {
         controller: 'ProfileCtrl as vmProfile'
       }
     }
-  })
-
-  .state('app.settings', {
-    url: '/settings',
-    views: {
-      'menuContent': {
-        templateUrl: 'states/settings/settings.html',
-        controller: 'SettingsCtrl as vmSettings'
-      }
-    }
   });
 
   // if none of the above states are matched, use this as the fallback
