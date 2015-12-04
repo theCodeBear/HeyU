@@ -41,6 +41,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     console.log('sending step 1');
     // Sending step 1 in finding person, user array in callback
     Socket.emit('finding people', mySocketId, (liveUsers, usersCoords) => {
+      console.log('mysocketID', mySocketId);
       if (liveUsers.length === 0) return;
       // filter people array by distance, returns distances array to match people array.
       let userDistances = filterUsersForDistance(liveUsers, usersCoords, vmChat.distanceSelected);
@@ -168,14 +169,14 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     // the first, say, 100 users who are within the distance range. This optimization
     // of course would only be needed if this app were super popular and had thousands
     // of people using it within the short distance ranges it allows, so very unlikely.
-    users = users.filter((el, i) => {
+    angular.copy(users.filter((el, i) => {
       miles = getDistanceFromCoords(coords.lat, coords.lon, userCoords[i].lat, userCoords[i].lon);
       if (miles <= +distanceMax) {
         distances.push(miles);
         return true;
       } else
         return false;
-    });
+    }), users);
     return distances;
   }
 
