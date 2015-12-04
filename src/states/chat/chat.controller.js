@@ -10,9 +10,11 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
 
   let vmChat = this;
 
-  let chatRoom;
+  let mySocketId;
+  let theirSocketId;
   let intervalTimer;
   const CHAT_TIME_AMOUNT = 600;
+  vmChat.theirName = null;
   vmChat.tick = CHAT_TIME_AMOUNT;
   vmChat.username = User.get();
   vmChat.distanceSelected = null;
@@ -24,45 +26,130 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
   vmChat.isThisUser = (name) => (vmChat.username === name) ? true : false;
 
 
-  Socket.on('user connected', (msg) => {
-    chatRoom = msg;
+  Socket.on('user connected', (socketId) => {
+    mySocketId = socketId;
+    console.log('my socket', mySocketId);
   });
-
-  // $interval(() => {
-  //   Socket.emit('blast', 'yooo');
-  // }, 2000)
 
   Socket.on('receive message', (msg) => {
     vmChat.messageHistory.push(msg);
   });
 
+  Socket.on('somone is available', () => {
+    lookingForSomeone();
+  });
+
   function lookingForSomeone() {
+    console.log('sending step 1');
+    // Sending step 1 in finding person, user array in callback
+    Socket.emit('finding people', mySocketId, (liveUsers) => {
+      console.log(liveUsers);
+      console.log(liveUsers[Math.floor(Math.random() * liveUsers.length)]);
+      if (liveUsers.length === 0) return;
+      let otherUserSocketId = liveUsers[Math.floor(Math.random() * liveUsers.length)];
+      if (otherUserSocketId) {
+        theirSocketId = 'waiting';
+        // Sending step 2 in finding person
+        console.log('sending step 2');
+        Socket.emit('attempt connection',
+          {sendingId: mySocketId, sendingName: vmChat.username, receivingId: otherUserSocketId}
+        );
+      } else {
+        $timeout(() => {
+      if (!theirSocketId) lookingForSomeone();
+    }, Math.random() * 700 + 300);
+      }
+    });
+  }
+
+  // receiving step 3 in finding person
+  Socket.on('can you connect', (ids) => {
+    console.log('received step 3');
+    console.log('theirSocketId', theirSocketId);
+    if (!theirSocketId) {
+      theirSocketId = ids.sendingId;
+      vmChat.theirName = ids.sendingName;
+      ids.receivingName = vmChat.username;
+      // sending step 4 success in finding person
+      console.log('sending success step 4');
+      Socket.emit('lets chat', ids);
+      removeIdFromAvailableList();
+      startChatCountdown();
+    } else {
+      // sending step 4 failure in finding person
+      console.log('sending failure step 4');
+      Socket.emit('busy', ids);
+      // This timeout fixes a bug in which the client would stop looking for
+      // a connection sometimes, not sure the cause of the bug, but this fixes it.
+      $timeout(() => {
+        if (!vmChat.chatFound && theirSocketId) {
+          console.log('******** IN 2 SECOND TIMEOUT');
+          theirSocketId = null;
+        }
+      }, 2000);
+    }
+  });
+
+  // receiving step 5 failure in finding person. Wait, then restart process.
+  Socket.on('cannot connect', () => {
+    console.log('receiving failure step 5, its over');
+    theirSocketId = null;
     $timeout(() => {
-      vmChat.chatFound = true;
-      intervalTimer = $interval(() => {
-        if (vmChat.tick === 0) return ditchChat();
-        vmChat.tick--;
-      }, 1000);
-    }, 3000);
+      if (!theirSocketId) lookingForSomeone();
+    }, Math.random() * 700 + 300);
+  });
+
+  // receiving step 5 success in finding person
+  Socket.on('ready to connect', (ids) => {
+    console.log('receiving success step 5');
+    theirSocketId = ids.receivingId;
+    vmChat.theirName = ids.receivingName;
+    removeIdFromAvailableList();
+    startChatCountdown();
+  });
+
+  Socket.on('chat is over', () => {
+    ditchChat(false);
+  });
+
+  // runs the clock countdown
+  function startChatCountdown() {
+    // removeIdFromAvailableList();  -- if only end up using this when calling this function, just put this here
+    vmChat.chatFound = true;
+    intervalTimer = $interval(() => {
+      if (vmChat.tick === 0) return ditchChat(true);
+      vmChat.tick--;
+    }, 1000);
+  }
+
+  function addIdToAvailableList() {
+    Socket.emit('available for chat');
+  }
+
+  function removeIdFromAvailableList() {
+    Socket.emit('unavailable for chat');
   }
 
   function selectDistance(distance) {
     vmChat.distanceSelected = distance;
     Settings.setRange(distance);
+    addIdToAvailableList();
     lookingForSomeone();
   }
 
   function sendMessage(msg) {
-    let message = {user: vmChat.username, message: msg, room: chatRoom};
+    let message = {user: vmChat.username, message: msg, room: theirSocketId};
     vmChat.messageHistory.push(message);
     vmChat.message = '';
     Socket.emit('message sent', message);
   }
 
-  function ditchChat() {
+  function ditchChat(endedByYou) {
+    if (endedByYou) Socket.emit('chat ended', theirSocketId);
     $interval.cancel(intervalTimer);
     vmChat.tick = CHAT_TIME_AMOUNT;
     vmChat.chatFound = false;
+    addIdToAvailableList();
     lookingForSomeone();
     vmChat.messageHistory = [];
   }
