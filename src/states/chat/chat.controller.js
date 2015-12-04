@@ -4,15 +4,17 @@ angular.module('close')
 
 .controller('ChatCtrl', ChatCtrl);
 
-ChatCtrl.$inject = ['$timeout', 'User', 'Settings', 'Socket', '$interval'];
+ChatCtrl.$inject = ['$timeout', 'User', 'Settings', 'Socket', '$interval', '$cordovaGeolocation'];
 
-function ChatCtrl($timeout, User, Settings, Socket, $interval) {
+function ChatCtrl($timeout, User, Settings, Socket, $interval, $cordovaGeolocation) {
 
   let vmChat = this;
 
   let mySocketId;
   let theirSocketId;
   let intervalTimer;
+  let coords = {};
+  let posOptions = {timeout: 10000, enableHighAccuracy: true};
   const CHAT_TIME_AMOUNT = 600;
   vmChat.theirName = null;
   vmChat.tick = CHAT_TIME_AMOUNT;
@@ -42,9 +44,10 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
   function lookingForSomeone() {
     console.log('sending step 1');
     // Sending step 1 in finding person, user array in callback
-    Socket.emit('finding people', mySocketId, (liveUsers) => {
+    Socket.emit('finding people', mySocketId, (liveUsers, usersCoords) => {
       console.log(liveUsers);
       console.log(liveUsers[Math.floor(Math.random() * liveUsers.length)]);
+      console.log('users coords', usersCoords);
       if (liveUsers.length === 0) return;
       let otherUserSocketId = liveUsers[Math.floor(Math.random() * liveUsers.length)];
       if (otherUserSocketId) {
@@ -131,8 +134,8 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
     }, 500);
   }
 
-  function addIdToAvailableList() {
-    Socket.emit('available for chat');
+  function addIdToAvailableList(coordinates) {
+    Socket.emit('available for chat', coordinates);
   }
 
   function removeIdFromAvailableList() {
@@ -142,8 +145,19 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
   function selectDistance(distance) {
     vmChat.distanceSelected = distance;
     Settings.setRange(distance);
-    addIdToAvailableList();
-    lookingForSomeone();
+    // addIdToAvailableList(coords);
+    getCoordinates();
+    // lookingForSomeone();
+  }
+
+  function getCoordinates() {
+    $cordovaGeolocation.getCurrentPosition(posOptions).then((position) => {
+      console.log(position);
+      coords.lat = position.coords.latitude;
+      coords.lon = position.coords.longitude;
+      addIdToAvailableList(coords);
+      lookingForSomeone();
+    });
   }
 
   function sendMessage(msg) {
@@ -158,7 +172,7 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
     $interval.cancel(intervalTimer);
     vmChat.tick = CHAT_TIME_AMOUNT;
     vmChat.chatFound = false;
-    addIdToAvailableList();
+    addIdToAvailableList(coords);
     lookingForSomeone();
     vmChat.messageHistory = [];
   }
