@@ -49,14 +49,22 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval, $cordovaGeolocati
       console.log(liveUsers[Math.floor(Math.random() * liveUsers.length)]);
       console.log('users coords', usersCoords);
       if (liveUsers.length === 0) return;
-      let otherUserSocketId = liveUsers[Math.floor(Math.random() * liveUsers.length)];
+      // filter people array by distance, returns distances array to match people array.
+      let userDistances = filterUsersForDistance(liveUsers, usersCoords, vmChat.distanceSelected);
+      console.log('userDistances', userDistances);
+      let pickedIndex = Math.floor(Math.random() * liveUsers.length);
+      let otherUserSocketId = liveUsers[pickedIndex];
       if (otherUserSocketId) {
         theirSocketId = 'waiting';
         // Sending step 2 in finding person
         console.log('sending step 2');
-        Socket.emit('attempt connection',
-          {sendingId: mySocketId, sendingName: vmChat.username, receivingId: otherUserSocketId}
-        );
+        // sending distance so other user can check distance against their own setting
+        Socket.emit('attempt connection', {
+            sendingId: mySocketId,
+            sendingName: vmChat.username,
+            receivingId: otherUserSocketId,
+            distance: userDistances[pickedIndex]
+        });
       } else {
         $timeout(() => {
       if (!theirSocketId) lookingForSomeone();
@@ -65,11 +73,46 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval, $cordovaGeolocati
     });
   }
 
+  function filterUsersForDistance(users, userCoords, distanceMax) {
+    let distances = [];
+    let miles;
+    // later might want to optimize this by using a normal for-loop and only grab
+    // the first, say, 100 users who are within the distance range. This optimization
+    // of course would only be needed if this app were super popular and had thousands
+    // of people using it within the short distance ranges it allows, so very unlikely.
+    users = users.filter((el, i) => {
+      miles = getDistanceFromCoords(coords.lat, coords.lon, userCoords[i].lat, userCoords[i].lon);
+      console.log('miles', miles);
+      if (miles <= +distanceMax) {
+        distances.push(miles);
+        return true;
+      } else
+        return false;
+    });
+    return distances;
+  }
+
+  // given two pairs of geo-coords, returns distance in miles
+  function getDistanceFromCoords(lat1, lon1, lat2, lon2) {
+    const earthRadius = 3959;   // in miles
+    let dLat = degToRadians(lat2 - lat1);
+    let dLon = degToRadians(lon2 - lon1);
+    let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(degToRadians(lat1)) * Math.cos(degToRadians(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return earthRadius * c;
+  }
+
+  function degToRadians(deg) {
+    return deg * (Math.PI / 180);
+  }
+
   // receiving step 3 in finding person
   Socket.on('can you connect', (ids) => {
     console.log('received step 3');
     console.log('theirSocketId', theirSocketId);
-    if (!theirSocketId) {
+    if (!theirSocketId && ids.distance <= vmChat.distanceSelected) {
       theirSocketId = ids.sendingId;
       vmChat.theirName = ids.sendingName;
       ids.receivingName = vmChat.username;
