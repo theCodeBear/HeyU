@@ -116,10 +116,14 @@ function ChatCtrl($timeout, User, Settings, Socket, $interval) {
   function startChatCountdown() {
     // removeIdFromAvailableList();  -- if only end up using this when calling this function, just put this here
     vmChat.chatFound = true;
+    let start = new Date().getTime();
+    let elapsedSecs = 0;
     intervalTimer = $interval(() => {
       if (vmChat.tick === 0) return ditchChat(true);
-      vmChat.tick--;
-    }, 1000);
+      let elapsedMillis = new Date().getTime() - start;
+      elapsedSecs = Math.floor(elapsedMillis/1000);
+      vmChat.tick = CHAT_TIME_AMOUNT - elapsedSecs;
+    }, 500);
   }
 
   function addIdToAvailableList() {
