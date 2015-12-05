@@ -32,7 +32,7 @@
     </div>
 
     <!-- Loading, looking for person to chat with -->
-    <div class='h2 text-center' ng-if='vmChat.distanceSelected && !vmChat.chatFound'>
+    <div class='h2 text-center' ng-if='vmChat.distanceSelected && !vmChat.chatFound && !vmChat.retryUserSearch'>
       <p>Looking for someone...</p>
       <i class='icon ion-load-a'></i>
     </div>
@@ -49,6 +49,13 @@
       <form ng-submit='vmChat.sendMessage(vmChat.message)'>
         <input type='text' ng-model='vmChat.message' style='width: 100%;' placeholder='Chat message...'>
       </form>
+    </div>
+
+    <div class='text-center' ng-if='vmChat.retryUserSearch'>
+      <h3> No one is around :( </h3>
+      <button class='button button-outline button-balanced button-large' ng-click='vmChat.retrySearch()'>
+        Retry Looking For People
+      </button>
     </div>
 
   </ion-content>

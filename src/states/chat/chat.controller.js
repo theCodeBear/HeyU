@@ -17,6 +17,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   let coords = {};
   let posOptions = {timeout: 10000, enableHighAccuracy: true};
   vmChat.theirName = null;
+  vmChat.retryUserSearch = false;
   vmChat.tick = CHAT_TIME_AMOUNT;
   vmChat.username = User.get();
   vmChat.distanceSelected = null;
@@ -25,6 +26,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   vmChat.selectDistance = selectDistance;
   vmChat.sendMessage = sendMessage;
   vmChat.ditchChat = ditchChat;
+  vmChat.retrySearch = retrySearch;
   vmChat.isThisUser = (name) => (vmChat.username === name) ? true : false;
 
 
@@ -42,10 +44,10 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     // Sending step 1 in finding person, user array in callback
     Socket.emit('finding people', mySocketId, (liveUsers, usersCoords) => {
       console.log('mysocketID', mySocketId);
-      if (liveUsers.length === 0) return; // if users array from server is empty
+      if (liveUsers.length === 0) return vmChat.retryUserSearch = true; // if live users array from server is empty
       // filter people array by distance, returns distances array to match people array.
       let userDistances = filterUsersForDistance(liveUsers, usersCoords, vmChat.distanceSelected);
-      if (liveUsers.length === 0) return; // if users array filtered by distance is empty
+      if (liveUsers.length === 0) return vmChat.retryUserSearch = true; // if users array filtered by distance is empty
       let pickedIndex = Math.floor(Math.random() * liveUsers.length);
       let otherUserSocketId = liveUsers[pickedIndex];
       if (otherUserSocketId) {
@@ -114,6 +116,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   function startChatCountdown() {
     // removeIdFromAvailableList();  -- if only end up using this when calling this function, just put this here
     vmChat.chatFound = true;
+    vmChat.retryUserSearch = false;
     let start = new Date().getTime();
     let elapsedSecs = 0;
     intervalTimer = $interval(() => {
@@ -161,6 +164,11 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     addIdToAvailableList(coords);
     lookingForSomeone();
     vmChat.messageHistory = [];
+  }
+
+  function retrySearch() {
+    vmChat.retryUserSearch = false;
+    lookingForSomeone();
   }
 
   function filterUsersForDistance(users, userCoords, distanceMax) {
