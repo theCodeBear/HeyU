@@ -42,9 +42,10 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     // Sending step 1 in finding person, user array in callback
     Socket.emit('finding people', mySocketId, (liveUsers, usersCoords) => {
       console.log('mysocketID', mySocketId);
-      if (liveUsers.length === 0) return;
+      if (liveUsers.length === 0) return; // if users array from server is empty
       // filter people array by distance, returns distances array to match people array.
       let userDistances = filterUsersForDistance(liveUsers, usersCoords, vmChat.distanceSelected);
+      if (liveUsers.length === 0) return; // if users array filtered by distance is empty
       let pickedIndex = Math.floor(Math.random() * liveUsers.length);
       let otherUserSocketId = liveUsers[pickedIndex];
       if (otherUserSocketId) {
