@@ -6,7 +6,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('close', ['ionic', 'btford.socket-io', 'ngCordova'])
+angular.module('close', ['ionic', 'btford.socket-io', 'ngCordova', 'satellizer'])
 
 .run(run)
 .config(config);
@@ -32,9 +32,14 @@ function run($ionicPlatform) {
 }
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$authProvider'];
 
-function config($stateProvider, $urlRouterProvider) {
+function config($stateProvider, $urlRouterProvider, $authProvider) {
+
+  $authProvider.facebook({
+    clientId: '197260627276113'//,
+    // redirectUri: 'http://localhost:3000/auth/facebook'
+  });
 
   $stateProvider
 

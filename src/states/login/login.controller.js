@@ -4,11 +4,26 @@ angular.module('close')
 
 .controller('LoginCtrl', LoginCtrl);
 
-LoginCtrl.$inject = [];
+LoginCtrl.$inject = ['$auth'];
 
-function LoginCtrl() {
+function LoginCtrl($auth) {
 
   let vmLogin = this;
 
+
+  vmLogin.authenticate = authenticate;
+
+
+
+
+  function authenticate(provider) {
+    $auth.authenticate(provider).then((response) => {
+      // handle successfull authentication
+      console.log('SUCCESS', response);
+    }).catch((response) => {
+      // handle error
+      console.log('ERROR', response);
+    });
+  }
 
 }
