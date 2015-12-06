@@ -4,9 +4,9 @@ angular.module('heyU')
 
 .controller('LoginCtrl', LoginCtrl);
 
-LoginCtrl.$inject = ['$auth'];
+LoginCtrl.$inject = ['$auth', '$window'];
 
-function LoginCtrl($auth) {
+function LoginCtrl($auth, $window) {
 
   let vmLogin = this;
 
@@ -18,11 +18,11 @@ function LoginCtrl($auth) {
 
   function authenticate(provider) {
     $auth.authenticate(provider).then((response) => {
-      // handle successfull authentication
       console.log('SUCCESS', response);
+      // $window.localStorage.setItem('heyu_token', response.token);
+      // $window.localStorage.setItem('heyu_user', JSON.stringify(response.user));
     }).catch((response) => {
-      // handle error
-      console.log('ERROR', response);
+      console.log('ERROR', JSON.stringify(response));
     });
   }
 

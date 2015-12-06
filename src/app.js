@@ -30,9 +30,10 @@ config.$inject = ['$stateProvider', '$urlRouterProvider', '$authProvider'];
 
 function config($stateProvider, $urlRouterProvider, $authProvider) {
 
+  $authProvider.cordova = true;
   $authProvider.facebook({
-    clientId: '197260627276113'//,
-    // redirectUri: 'http://localhost:3000/auth/facebook'
+    clientId: '197260627276113',
+    redirectUri: 'http://localhost:3000/auth/facebook'
   });
 
   $stateProvider
