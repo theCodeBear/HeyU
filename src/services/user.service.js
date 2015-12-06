@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('close')
+angular.module('heyU')
 
 .factory('User', User);
 

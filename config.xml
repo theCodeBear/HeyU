@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.kronospherelabs.close" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Close</name>
+<widget id="com.kronospherelabs.heyu" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>HeyU</name>
   <description>
-        An Ionic Framework and Cordova project.
+        The quickest way to meet people close to you right now.
     </description>
   <author email="hi@ionicframework" href="http://ionicframework.com/">
       Ionic Framework Team

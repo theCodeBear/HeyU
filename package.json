@@ -1,7 +1,7 @@
 {
-  "name": "close",
+  "name": "heyu",
   "version": "1.0.0",
-  "description": "Close: The quickest to meet people close to you.",
+  "description": "HeyU: The quickest to meet people close to you.",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
