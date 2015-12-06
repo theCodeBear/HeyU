@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('heyU', ['ionic', 'btford.socket-io', 'ngCordova', 'satellizer'])
+angular.module('heyU', ['ionic', 'btford.socket-io', 'ngCordova'])
 
 .run(run)
 .config(config);
@@ -28,13 +28,8 @@ function run($ionicPlatform) {
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$authProvider'];
 
-function config($stateProvider, $urlRouterProvider, $authProvider) {
+function config($stateProvider, $urlRouterProvider) {
 
-  $authProvider.cordova = true;
-  $authProvider.facebook({
-    clientId: '197260627276113',
-    redirectUri: 'http://localhost:3000/auth/facebook'
-  });
 
   $stateProvider
 
