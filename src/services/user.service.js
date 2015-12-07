@@ -4,10 +4,10 @@ angular.module('heyU')
 
 .factory('User', User);
 
-User.$inject = ['$window', '$state', 'jwtHelper'];
+User.$inject = ['$window', '$state', '$http', 'jwtHelper'];
 
 
-function User($window, $state, jwtHelper) {
+function User($window, $state, $http, jwtHelper) {
 
   let _user;
   let _token;
@@ -22,6 +22,8 @@ function User($window, $state, jwtHelper) {
     getTokenFromLocalStorage,
     saveTokenToLocalStorage,
     getExpirationAsDateObject,
+    updateUserInfoInDB,
+    updateUserLocally,
     logout
   };
 
@@ -77,6 +79,16 @@ function User($window, $state, jwtHelper) {
     if (!_token) return null;
     let exp = jwtHelper.decodeToken(_token).exp;
     return new Date(exp);
+  }
+
+  function updateUserInfoInDB(info) {
+    return $http.put(`http://192.168.1.114:3000/users/${_user._id}`, info);
+  }
+
+  // only to be used when updateUserInfoInDB returns in accountSetup controller
+  function updateUserLocally(user) {
+    _user = user;
+    $window.localStorage.setItem('heyU_user', JSON.stringify(_user));
   }
 
   function logout() {

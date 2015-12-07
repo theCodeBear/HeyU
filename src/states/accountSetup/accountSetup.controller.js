@@ -10,4 +10,23 @@ function AccountSetupCtrl($state, User) {
 
   let vmAccount = this;
 
+
+  vmAccount.saveProfile = saveProfile;
+
+
+
+
+  function saveProfile(inputs) {
+    inputs.interests = [];
+    for (var key in inputs.hobbies) {
+      if (inputs.hobbies[key].trim()) inputs.interests.push(inputs.hobbies[key]);
+    }
+    delete inputs.hobbies;
+    User.updateUserInfoInDB(inputs).then((response) => {
+      User.updateUserLocally(response.data);
+    }).catch((response) => {
+      console.log('ERROR calling PUT /users', JSON.stringify(response));
+    });
+  }
+
 }

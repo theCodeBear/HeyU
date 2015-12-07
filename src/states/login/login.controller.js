@@ -39,7 +39,7 @@ function LoginCtrl($window, $http, $state, $cordovaOauth, User) {
         .then(({data: { user, token, alreadyInDB }}) => {
           User.saveUserToLocalStorage(user);
           User.saveTokenToLocalStorage(token);
-          alreadyInDB ? $state.go('app.chat') : $state.go('accountSetup');
+          (alreadyInDB && User.getUser().age) ? $state.go('app.chat') : $state.go('accountSetup');
         }).catch(error => console.log('error creating user', JSON.stringify(error)));
       }).catch(error => console.log('second part error', JSON.stringify(error)));
     }).catch(error => console.log('error', JSON.stringify(error)));
