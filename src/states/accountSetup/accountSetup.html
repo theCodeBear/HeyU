@@ -1,8 +1,34 @@
 <ion-view>
   <ion-content>
-    <h1>Account</h1>
-    <form name='accountForm' ng-submit='vmAccount.saveProfile(vmAccount.user)'>
-      <button type='submit' class='button button-block button-balanced' ng-disabled='accountForm.$invalid'>
+    <h2 class='text-center account-title'> Details </h2>
+    <form class='list account-form' name='accountForm' ng-submit='vmAccount.saveProfile(vmAccount.user)'>
+      <label class='item item-input'>
+        <input type='text' maxlength='25' ng-model='vmAccount.user.profession' placeholder='Profession*' required>
+      </label>
+
+      <label class='item item-input'>
+        <input type='number' ng-model='vmAccount.user.age' placeholder='Age*' required>
+      </label>
+
+      <label class='item item-input'>
+        <textarea placeholder='Bio' rows='5' ng-model='vmAccount.user.bio' maxlength='140'></textarea>
+      </label>
+
+      <div class='interests-input-container'>
+        <label class='item item-input interest-label'>
+          <input type='text' maxlength='15' ng-model='vmAccount.user.hobbies[0]' placeholder='Interest'>
+        </label>
+
+        <label class='item item-input interest-label'>
+          <input type='text' maxlength='15' ng-model='vmAccount.user.hobbies[1]' placeholder='Interest'>
+        </label>
+
+        <label class='item item-input interest-label'>
+          <input type='text' maxlength='15' ng-model='vmAccount.user.hobbies[2]' placeholder='Interest'>
+        </label>
+      </div>
+
+      <button type='submit' class='button button-block button-balanced create-account-btn' ng-disabled='accountForm.$invalid'>
         Create Account
       </button>
     </form>

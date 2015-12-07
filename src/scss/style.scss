@@ -1,9 +1,18 @@
+textarea {
+  resize: none;
+}
+
 .scroll {
   height: 100%;
 }
 
 .distance-icons {
   font-size: 50px;
+}
+
+.account-title {
+  font-weight: 200;
+  margin-top: 1em !important;
 }
 
 .chat-msg {
@@ -14,6 +23,30 @@
 .ditch-button {
   margin-left: 50px;
   color: red !important;
+}
+
+.account-form {
+  margin-top: 1em;
+}
+
+.interests-input-container {
+  margin-top: 10px;
+
+  label {
+    display: inline-block;
+    width: 33%;
+    text-align: center;
+    padding: 5px;
+
+    input {
+      text-align: center;
+      padding: 0;
+    }
+  }
+}
+
+.create-account-btn {
+  margin-top: 2em !important;
 }
 
 .profile-pic {
