@@ -10,15 +10,4 @@ function AccountSetupCtrl($state, User) {
 
   let vmAccount = this;
 
-
-  vmAccount.saveProfile = saveProfile;
-
-
-
-
-  function saveProfile(user) {
-    User.set(user);
-    $state.go('app.chat');
-  }
-
 }

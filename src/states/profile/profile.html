@@ -1,5 +1,19 @@
 <ion-view view-title="Profile">
   <ion-content>
-    <h1>Profile</h1>
+    <div class='text-center'>
+      <img class='profile-pic' ng-src='{{vmProfile.user.photo}}' alt='User Photo'>
+    </div>
+    <h2 class='text-center'>
+      {{ vmProfile.user.name }},
+      <span class='age-size'> {{vmProfile.user.age}} </span>
+    </h2>
+    <p class='text-center col col-offset-10 col-80'> {{ vmProfile.user.bio }} </p>
+    <!-- <h3 class='text-center col col-offset-10 col-80'> {{ vmProfile.user.age }} </h3> -->
+    <h4 class='text-center col col-offset-10 col-80'> {{ vmProfile.user.profession }} </h4>
+      <ul class='list list-inset interest-list'>
+        <li class='item inline col col-33' ng-repeat='interest in vmProfile.user.interests'>
+          {{interest}}
+        </li>
+      </ul>
   </ion-content>
 </ion-view>

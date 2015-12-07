@@ -2,7 +2,6 @@
   <ion-content>
     <h1>Account</h1>
     <form name='accountForm' ng-submit='vmAccount.saveProfile(vmAccount.user)'>
-      <input type='text' name='name' class='text-center' ng-model='vmAccount.user' placeholder='Name' style='width: 100%;' ng-minlength='3' required autocomplete='off'>
       <button type='submit' class='button button-block button-balanced' ng-disabled='accountForm.$invalid'>
         Create Account
       </button>

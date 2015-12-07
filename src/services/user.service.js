@@ -14,6 +14,7 @@ function User($window, $state, jwtHelper) {
 
   let service = {
     initUserAndToken,
+    getUserProfile,
     getUser,
     getToken,
     getUserFromLocalStorage,
@@ -31,6 +32,18 @@ function User($window, $state, jwtHelper) {
   function initUserAndToken() {
     _user = getUserFromLocalStorage();
     _token = getTokenFromLocalStorage();
+  }
+
+  function getUserProfile() {
+    return {
+      name: _user.name,
+      age: _user.age,
+      gender: _user.gender,
+      bio: _user.bio,
+      photo: _user.photo,
+      profession: _user.profession,
+      interests: _user.interests
+    };
   }
 
   function getUser() {
