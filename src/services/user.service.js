@@ -4,28 +4,65 @@ angular.module('heyU')
 
 .factory('User', User);
 
-User.$inject = [];
+User.$inject = ['$window', 'jwtHelper'];
 
 
-function User() {
+function User($window, jwtHelper) {
 
   let _user;
+  let _token;
 
   let service = {
-    get,
-    set
+    initUserAndToken,
+    getUser,
+    getToken,
+    getUserFromLocalStorage,
+    saveUserToLocalStorage,
+    getTokenFromLocalStorage,
+    saveTokenToLocalStorage,
+    getExpirationAsDateObject
   };
 
   return service;
 
 
+// FACTORY PUBLIC METHODS
+  function initUserAndToken() {
+    _user = getUserFromLocalStorage();
+    _token = getTokenFromLocalStorage();
+  }
 
-  function get() {
+  function getUser() {
     return _user;
   }
 
-  function set(name) {
-    _user = name;
+  function getToken() {
+    return _token;
+  }
+
+  function getUserFromLocalStorage() {
+    return JSON.parse($window.localStorage.getItem('heyU_user'));
+  }
+
+  function saveUserToLocalStorage(user) {
+    $window.localStorage.setItem('heyU_user', JSON.stringify(user));
+    _user = user;
+  }
+
+  function getTokenFromLocalStorage() {
+    return $window.localStorage.getItem('heyU_token');
+  }
+
+  function saveTokenToLocalStorage(token) {
+    $window.localStorage.setItem('heyU_token', token);
+    _token = token;
+  }
+
+  // returns null if no token is currently saved
+  function getExpirationAsDateObject() {
+    if (!_token) return null;
+    let exp = jwtHelper.decodeToken(_token).exp;
+    return new Date(exp);
   }
 
 }

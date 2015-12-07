@@ -19,7 +19,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   vmChat.theirName = null;
   vmChat.retryUserSearch = false;
   vmChat.tick = CHAT_TIME_AMOUNT;
-  vmChat.username = User.get();
+  // vmChat.username = User.get();
   vmChat.distanceSelected = null;
   vmChat.chatFound = null;
   vmChat.messageHistory = [];

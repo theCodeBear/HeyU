@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('heyU', ['ionic', 'btford.socket-io', 'ngCordova'])
+angular.module('heyU', ['ionic', 'btford.socket-io', 'ngCordova', 'angular-jwt'])
 
 .run(run)
 .config(config);
 
 
 
-run.$inject = ['$ionicPlatform'];
+run.$inject = ['$ionicPlatform', '$state', 'User'];
 
-function run($ionicPlatform) {
+function run($ionicPlatform, $state, User) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -22,6 +22,13 @@ function run($ionicPlatform) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    User.initUserAndToken();
+    // if user logged in
+    if (User.getUser() && User.getToken() && (User.getExpirationAsDateObject() > Date.now())) {
+      console.log('user logged in');
+      $state.go('app.chat');
+    } else console.log('user not logged in')
   });
 }
 

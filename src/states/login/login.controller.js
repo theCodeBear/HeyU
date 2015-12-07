@@ -4,15 +4,14 @@ angular.module('heyU')
 
 .controller('LoginCtrl', LoginCtrl);
 
-LoginCtrl.$inject = ['$window', '$http', '$state', '$cordovaOauth'];
+LoginCtrl.$inject = ['$window', '$http', '$state', '$cordovaOauth', 'User'];
 
-function LoginCtrl($window, $http, $state, $cordovaOauth) {
+function LoginCtrl($window, $http, $state, $cordovaOauth, User) {
 
   let vmLogin = this;
 
 
   vmLogin.authenticate = authenticate;
-
 
 
 
@@ -38,8 +37,8 @@ function LoginCtrl($window, $http, $state, $cordovaOauth) {
       }).then((result) => {
         $http.post('http://192.168.1.114:3000/user/authenticate', result.data)
         .then(({data: { user, token, alreadyInDB }}) => {
-          // $window.localStorage.setItem('heyU_token', token);
-          // $window.localStorage.setItem('heyU_user', JSON.stringify(user));
+          User.saveUserToLocalStorage(user);
+          User.saveTokenToLocalStorage(token);
           alreadyInDB ? $state.go('app.chat') : $state.go('accountSetup');
         }).catch(error => console.log('error creating user', JSON.stringify(error)));
       }).catch(error => console.log('second part error', JSON.stringify(error)));
