@@ -25,10 +25,8 @@ function run($ionicPlatform, $state, User) {
 
     User.initUserAndToken();
     // if user logged in
-    if (User.getUser() && User.getToken() && (User.getExpirationAsDateObject() > Date.now())) {
-      console.log('user logged in');
+    if (User.getUser() && User.getToken() && (User.getExpirationAsDateObject() > Date.now()))
       $state.go('app.chat');
-    } else console.log('user not logged in')
   });
 }
 
@@ -75,6 +73,16 @@ function config($stateProvider, $urlRouterProvider) {
       'menuContent': {
         templateUrl: 'states/profile/profile.html',
         controller: 'ProfileCtrl as vmProfile'
+      }
+    }
+  })
+
+  .state('app.settings', {
+    url: '/settings',
+    views: {
+      'menuContent': {
+        templateUrl: 'states/settings/settings.html',
+        controller: 'SettingsCtrl as vmSettings'
       }
     }
   });

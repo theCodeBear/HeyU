@@ -4,10 +4,10 @@ angular.module('heyU')
 
 .factory('User', User);
 
-User.$inject = ['$window', 'jwtHelper'];
+User.$inject = ['$window', '$state', 'jwtHelper'];
 
 
-function User($window, jwtHelper) {
+function User($window, $state, jwtHelper) {
 
   let _user;
   let _token;
@@ -20,7 +20,8 @@ function User($window, jwtHelper) {
     saveUserToLocalStorage,
     getTokenFromLocalStorage,
     saveTokenToLocalStorage,
-    getExpirationAsDateObject
+    getExpirationAsDateObject,
+    logout
   };
 
   return service;
@@ -63,6 +64,14 @@ function User($window, jwtHelper) {
     if (!_token) return null;
     let exp = jwtHelper.decodeToken(_token).exp;
     return new Date(exp);
+  }
+
+  function logout() {
+    $window.localStorage.removeItem('heyU_user');
+    $window.localStorage.removeItem('heyU_token');
+    _token = null;
+    _user = null;
+    $state.go('login');
   }
 
 }
