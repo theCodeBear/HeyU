@@ -26,7 +26,7 @@ function run($ionicPlatform) {
 }
 
 
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$authProvider'];
+config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
 function config($stateProvider, $urlRouterProvider) {
 
