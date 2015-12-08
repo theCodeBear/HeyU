@@ -9,7 +9,6 @@
     <button class='button ditch-button' ng-click='vmChat.ditchChat(true)' ng-if='vmChat.chatFound'>Ditch</button>
   </ion-nav-buttons>
   <ion-content>
-    <h1>Chat</h1>
 
     <!-- Select Discovery Range -->
     <div ng-if='!vmChat.distanceSelected && !vmChat.chatFound'>
@@ -38,11 +37,10 @@
 
     <!-- Person found, chat template -->
     <div class='h2 text-center' ng-if='vmChat.chatFound'>
-      <p> A new challenger appears </p>
       <ul>
-        <li ng-repeat='message in vmChat.messageHistory' class='chat-msg' ng-class='{"text-left": !vmChat.isThisUser(message.user), "text-right": vmChat.isThisUser(message.user)}'>
-          {{ message.user }}:
-          <p> {{ message.message}} </p>
+        <li ng-repeat='message in vmChat.messageHistory' class='chat-msg' ng-class='{"other-chatter": !vmChat.isThisUser(message.user), "this-chatter": vmChat.isThisUser(message.user)}'>
+          {{ message.user }}
+          <p class='chat-bubble'> {{ message.message}} </p>
         </li>
       </ul>
       <form ng-submit='vmChat.sendMessage(vmChat.message)'>

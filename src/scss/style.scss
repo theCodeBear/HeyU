@@ -16,8 +16,34 @@ textarea {
 }
 
 .chat-msg {
-  font-size: 0.5em;
-  width: 100%;
+  margin-top: 1em;
+  width: 50%;
+  font-size: 0.6em;
+}
+
+.chat-bubble {
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.other-chatter {
+  text-align: left;
+  margin-left: 2%;
+  margin-right: 50%;
+
+  p {
+    background-color: lightgreen;
+  }
+}
+
+.this-chatter {
+  text-align: right;
+  margin-left: 50%;
+  margin-right: 2%;
+
+  p {
+    background-color: lightblue;
+  }
 }
 
 .ditch-button {

@@ -18,6 +18,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
   let posOptions = {timeout: 10000, enableHighAccuracy: false};
   let theirDbId = null;
   vmChat.theirName;
+  vmChat.myName = (ionic.Platform.platform()==='macintel') ? 'BrowserTodd' : User.getUser().name;
   vmChat.retryUserSearch = false;
   vmChat.tick = CHAT_TIME_AMOUNT;
   vmChat.distanceSelected = null;
@@ -27,7 +28,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
   vmChat.sendMessage = sendMessage;
   vmChat.ditchChat = ditchChat;
   vmChat.retrySearch = retrySearch;
-  vmChat.isThisUser = (name) => (vmChat.username === name) ? true : false;
+  vmChat.isThisUser = (name) => (vmChat.myName === name) ? true : false;
 
 
   Socket.on('user connected', (socketId) => mySocketId = socketId);
@@ -158,7 +159,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
   }
 
   function sendMessage(msg) {
-    let message = {user: vmChat.username, message: msg, room: theirSocketId};
+    let message = {user: (ionic.Platform.platform()==='macintel') ? 'Browser' : User.getUser().name, message: msg, room: theirSocketId};
     vmChat.messageHistory.push(message);
     vmChat.message = '';
     Socket.emit('message sent', message);
