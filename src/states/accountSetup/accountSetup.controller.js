@@ -14,8 +14,6 @@ function AccountSetupCtrl($state, User) {
   vmAccount.saveProfile = saveProfile;
 
 
-
-
   function saveProfile(inputs) {
     inputs.interests = [];
     for (var key in inputs.hobbies) {

@@ -33,6 +33,8 @@ function run($ionicPlatform, $state, User) {
 }
 
 
+
+
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
 function config($stateProvider, $urlRouterProvider) {
@@ -55,8 +57,7 @@ function config($stateProvider, $urlRouterProvider) {
   .state('app', {
     url: '/app',
     abstract: true,
-    templateUrl: 'states/menu/menu.html',
-    controller: 'MenuCtrl as vmMenu'
+    templateUrl: 'states/menu/menu.html'
   })
 
   .state('app.chat', {

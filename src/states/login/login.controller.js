@@ -4,9 +4,9 @@ angular.module('heyU')
 
 .controller('LoginCtrl', LoginCtrl);
 
-LoginCtrl.$inject = ['$window', '$http', '$state', '$cordovaOauth', 'User'];
+LoginCtrl.$inject = ['$http', '$state', '$cordovaOauth', 'User'];
 
-function LoginCtrl($window, $http, $state, $cordovaOauth, User) {
+function LoginCtrl($http, $state, $cordovaOauth, User) {
 
   let vmLogin = this;
 
@@ -15,7 +15,6 @@ function LoginCtrl($window, $http, $state, $cordovaOauth, User) {
 
 
 
-  function authenticate() {
     // LOGIN FLOW:
     // on angular run() function check if access token in local storage and it
     // hasn't expired.
@@ -27,6 +26,7 @@ function LoginCtrl($window, $http, $state, $cordovaOauth, User) {
     // the accountSetup page and go straight to the chat page. if server sends back
     // (user, token, false) that means user was just created in DB so app needs to
     // go to accountSetup page.
+  function authenticate() {
     $cordovaOauth.facebook('197260627276113', ['email']).then((fbToken) => {
       $http.get('https://graph.facebook.com/v2.5/me', {
         params: {

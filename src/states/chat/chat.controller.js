@@ -79,7 +79,6 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
       // sending step 4 success in finding person
       console.log('sending success step 4');
       Socket.emit('lets chat', ids);
-      removeIdFromAvailableList();
       prepareForChat();
     } else {
       // sending step 4 failure in finding person
@@ -107,13 +106,13 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
     console.log('receiving success step 5');
     theirSocketId = ids.receivingId;
     theirDbId = ids.receivingDbId;
-    removeIdFromAvailableList();
     prepareForChat();
   });
 
 
   // Gets chatter's profile from database, saves it, starts chat.
   function prepareForChat() {
+    removeIdFromAvailableList();
     User.retrieveChatterProfileFromDb(theirDbId).then((response) => {
       User.saveChatter(response.data);
       vmChat.theirName = User.getChatter().name;
@@ -123,7 +122,6 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
 
   // runs the clock countdown
   function startChatCountdown() {
-    // removeIdFromAvailableList();  -- if only end up using this when calling this function, just put this here
     vmChat.chatFound = true;
     vmChat.retryUserSearch = false;
     let start = new Date().getTime();
