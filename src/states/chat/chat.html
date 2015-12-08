@@ -1,9 +1,4 @@
 <ion-view view-title="{{ vmChat.tick | timer }}">
-  <!-- <ion-header-bar>
-    <div class="buttons">
-      <button class="button button-clear">Blah</button>
-    </div>
-  </ion-header-bar> -->
   <ion-nav-buttons side='right'>
     <button class='button button-clear' ng-if='vmChat.chatFound' ng-click='openModal()'><i class='icon ion-person'></i></button>
     <button class='button ditch-button' ng-click='vmChat.ditchChat(true)' ng-if='vmChat.chatFound'>Ditch</button>
@@ -11,7 +6,7 @@
   <ion-content>
 
     <!-- Select Discovery Range -->
-    <div ng-if='!vmChat.distanceSelected && !vmChat.chatFound'>
+    <div class='chatpage-display-container' ng-if='!vmChat.distanceSelected && !vmChat.chatFound'>
       <h3 class='text-center'>Meet people within...</h3>
       <div class='row'>
         <div class='col col-33 text-center' ng-click='vmChat.selectDistance(1)'>
@@ -30,9 +25,9 @@
     </div>
 
     <!-- Loading, looking for person to chat with -->
-    <div class='h2 text-center' ng-if='vmChat.distanceSelected && !vmChat.chatFound && !vmChat.retryUserSearch'>
-      <p>Looking for someone...</p>
-      <i class='icon ion-load-a'></i>
+    <div class='chatpage-display-container' ng-if='vmChat.distanceSelected && !vmChat.chatFound && !vmChat.retryUserSearch'>
+      <h3>Looking for someone...</h3>
+      <i class='icon ion-load-a h2'></i>
     </div>
 
     <!-- Person found, chat template -->
@@ -48,7 +43,8 @@
       </form>
     </div>
 
-    <div class='text-center' ng-if='vmChat.retryUserSearch'>
+    <!-- No one is around template -->
+    <div class='chatpage-display-container' ng-if='vmChat.retryUserSearch'>
       <h3> No one is around :( </h3>
       <button class='button button-outline button-balanced button-large' ng-click='vmChat.retrySearch()'>
         Retry Looking For People

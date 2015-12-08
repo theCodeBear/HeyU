@@ -6,13 +6,51 @@ textarea {
   height: 100%;
 }
 
-.distance-icons {
-  font-size: 50px;
+// LOGIN.HTML
+
+.login-title {
+  text-align: center;
+  margin-top: 20% !important;
+  width: 100%;
 }
+
+.login-button-container {
+  position: absolute;
+  bottom: 20%;
+  text-align: center;
+  width: 100%;
+}
+// END OF LOGIN.HTML
+
+// ACCOUNTSETUP.HTML
 
 .account-title {
   font-weight: 200;
   margin-top: 1em !important;
+}
+
+.account-form {
+  margin-top: 1em;
+  position: absolute;
+  top: 10%;
+  bottom: 0;
+}
+
+.create-account-btn {
+  position: absolute;
+  bottom: 10%;
+}
+// END OF ACCOUNTSETUP.HTML
+
+// CHAT.HTML
+
+.chatpage-display-container {
+  margin-top: 30%;
+  text-align: center;
+}
+
+.distance-icons {
+  font-size: 50px;
 }
 
 .chat-msg {
@@ -50,10 +88,10 @@ textarea {
   margin-left: 50px;
   color: red !important;
 }
+// END OF CHAT.HTML
 
-.account-form {
-  margin-top: 1em;
-}
+
+// PROFILE.HTML
 
 .interests-input-container {
   margin-top: 10px;
@@ -69,10 +107,6 @@ textarea {
       padding: 0;
     }
   }
-}
-
-.create-account-btn {
-  margin-top: 2em !important;
 }
 
 .profile-pic {
@@ -93,3 +127,12 @@ textarea {
   margin: 0;
   text-align: center
 }
+// END OF PROFILE.HTML
+
+// SETTINGS.HTML
+
+.logout-button {
+  position: absolute;
+  bottom: 10%;
+}
+// END OF SETTINGS.HTML
