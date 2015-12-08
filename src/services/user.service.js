@@ -11,6 +11,8 @@ function User($window, $state, $http, jwtHelper) {
 
   let _user;
   let _token;
+  let _chattingWithUser;
+
 
   let service = {
     initUserAndToken,
@@ -24,7 +26,10 @@ function User($window, $state, $http, jwtHelper) {
     getExpirationAsDateObject,
     updateUserInfoInDB,
     updateUserLocally,
-    logout
+    logout,
+    retrieveChatterProfileFromDb,
+    saveChatter,
+    getChatter
   };
 
   return service;
@@ -97,6 +102,19 @@ function User($window, $state, $http, jwtHelper) {
     _token = null;
     _user = null;
     $state.go('login');
+  }
+
+// functions dealing with the user this client is chatting with:
+  function retrieveChatterProfileFromDb(id) {
+    return $http.get(`http://192.168.1.114:3000/users/${id}`);
+  }
+
+  function saveChatter(user) {
+    _chattingWithUser = user;
+  }
+
+  function getChatter() {
+    return _chattingWithUser;
   }
 
 }

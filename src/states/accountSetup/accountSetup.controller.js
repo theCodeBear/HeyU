@@ -24,6 +24,7 @@ function AccountSetupCtrl($state, User) {
     delete inputs.hobbies;
     User.updateUserInfoInDB(inputs).then((response) => {
       User.updateUserLocally(response.data);
+      $state.go('app.chat');
     }).catch((response) => {
       console.log('ERROR calling PUT /users', JSON.stringify(response));
     });

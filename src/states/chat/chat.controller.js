@@ -15,11 +15,11 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   let theirSocketId;
   let intervalTimer;
   let coords = {};
-  let posOptions = {timeout: 10000, enableHighAccuracy: true};
-  vmChat.theirName = null;
+  let posOptions = {timeout: 10000, enableHighAccuracy: false};
+  let theirDbId = null;
+  vmChat.theirName;
   vmChat.retryUserSearch = false;
   vmChat.tick = CHAT_TIME_AMOUNT;
-  // vmChat.username = User.get();
   vmChat.distanceSelected = null;
   vmChat.chatFound = null;
   vmChat.messageHistory = [];
@@ -43,7 +43,6 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     console.log('sending step 1');
     // Sending step 1 in finding person, user array in callback
     Socket.emit('finding people', mySocketId, (liveUsers, usersCoords) => {
-      console.log('mysocketID', mySocketId);
       if (liveUsers.length === 0) return vmChat.retryUserSearch = true; // if live users array from server is empty
       // filter people array by distance, returns distances array to match people array.
       let userDistances = filterUsersForDistance(liveUsers, usersCoords, vmChat.distanceSelected);
@@ -57,7 +56,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
         // sending distance so other user can check distance against their own setting
         Socket.emit('attempt connection', {
             sendingId: mySocketId,
-            sendingName: vmChat.username,
+            sendingDbId: ((ionic.Platform.platform()==='macintel') ? '001' : User.getUser()._id),
             receivingId: otherUserSocketId,
             distance: userDistances[pickedIndex]
         });
@@ -74,13 +73,13 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
     console.log('received step 3');
     if (!theirSocketId && ids.distance <= vmChat.distanceSelected) {
       theirSocketId = ids.sendingId;
-      vmChat.theirName = ids.sendingName;
-      ids.receivingName = vmChat.username;
+      theirDbId = ids.sendingDbId;
+      ids.receivingDbId = (ionic.Platform.platform()==='macintel') ? '002' : User.getUser()._id;
       // sending step 4 success in finding person
       console.log('sending success step 4');
       Socket.emit('lets chat', ids);
       removeIdFromAvailableList();
-      startChatCountdown();
+      prepareForChat();
     } else {
       // sending step 4 failure in finding person
       console.log('sending failure step 4');
@@ -106,11 +105,20 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   Socket.on('ready to connect', (ids) => {
     console.log('receiving success step 5');
     theirSocketId = ids.receivingId;
-    vmChat.theirName = ids.receivingName;
+    theirDbId = ids.receivingDbId;
     removeIdFromAvailableList();
-    startChatCountdown();
+    prepareForChat();
   });
 
+
+  // Gets chatter's profile from database, saves it, starts chat.
+  function prepareForChat() {
+    User.retrieveChatterProfileFromDb(theirDbId).then((response) => {
+      User.saveChatter(response.data);
+      vmChat.theirName = User.getChatter().name;
+      startChatCountdown();
+    }).catch((response) => console.log('ERROR', JSON.stringify(response)));
+  }
 
   // runs the clock countdown
   function startChatCountdown() {

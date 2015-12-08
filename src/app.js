@@ -27,7 +27,6 @@ function run($ionicPlatform, $state, User) {
     // if user logged in
     if (User.getUser() && User.getToken() && (User.getExpirationAsDateObject() > Date.now())) {
       // user has completed account setup or not
-      console.log('user age', User.getUser().age)
       User.getUser().age ? $state.go('app.chat') : $state.go('accountSetup');
     }
   });
