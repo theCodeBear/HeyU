@@ -1,0 +1,26 @@
+<ion-modal-view>
+  <!-- <ion-header-bar> -->
+    <!-- <h1 class="title">{{chatter.name}}</h1> -->
+    
+  <!-- </ion-header-bar> -->
+  <ion-content>
+    <div class='text-right'>
+      <button class='button button-clear button-dark button-large' ng-click='closeModal()'><i class='icon ion-close'></i></button>
+    </div>
+
+    <div class='text-center'>
+      <img class='profile-pic' ng-src='{{chatter.photo}}' alt='User Photo'>
+    </div>
+    <h2 class='text-center'>
+      {{ chatter.name }},
+      <span class='age-size'> {{chatter.age}} </span>
+    </h2>
+    <p class='text-center col col-offset-10 col-80'> {{ chatter.bio }} </p>
+    <h4 class='text-center col col-offset-10 col-80'> {{ chatter.profession }} </h4>
+    <ul class='list list-inset interest-list'>
+      <li class='item inline col col-33' ng-repeat='interest in chatter.interests'>
+        {{interest}}
+      </li>
+    </ul>
+  </ion-content>
+</ion-modal-view>

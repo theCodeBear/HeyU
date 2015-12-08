@@ -5,7 +5,7 @@
     </div>
   </ion-header-bar> -->
   <ion-nav-buttons side='right'>
-    <button class='button button-clear' ng-if='vmChat.chatFound'><i class='icon ion-person'></i></button>
+    <button class='button button-clear' ng-if='vmChat.chatFound' ng-click='openModal()'><i class='icon ion-person'></i></button>
     <button class='button ditch-button' ng-click='vmChat.ditchChat(true)' ng-if='vmChat.chatFound'>Ditch</button>
   </ion-nav-buttons>
   <ion-content>

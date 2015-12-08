@@ -4,9 +4,9 @@ angular.module('heyU')
 
 .controller('ChatCtrl', ChatCtrl);
 
-ChatCtrl.$inject = ['$timeout', 'User', 'Socket', '$interval', '$cordovaGeolocation'];
+ChatCtrl.$inject = ['$timeout', 'User', 'Socket', '$interval', '$cordovaGeolocation', '$ionicModal', '$scope'];
 
-function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
+function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionicModal, $scope) {
 
   let vmChat = this;
 
@@ -212,5 +212,25 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation) {
   function degToRadians(deg) {
     return deg * (Math.PI / 180);
   }
+
+
+
+  $ionicModal.fromTemplateUrl('states/chat/chatterProfile.template.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.openModal = function() {
+    $scope.chatter = User.getChatter();
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
 
 }
