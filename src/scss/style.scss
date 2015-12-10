@@ -12,15 +12,32 @@ textarea {
 
 // LOGIN.HTML
 
+#login-content {
+  background: url('../img/new_years.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .login-title {
   text-align: center;
   margin-top: 20% !important;
   width: 100%;
+  color: white;
+  font-size: 6em;
+  line-height: 1em;
+}
+
+.login-subtitle {
+  color: white;
+  font-size: 1.5em;
+  margin-top: 20px;
 }
 
 .login-button-container {
   position: absolute;
-  bottom: 20%;
+  bottom: 25%;
   text-align: center;
   width: 100%;
 }
