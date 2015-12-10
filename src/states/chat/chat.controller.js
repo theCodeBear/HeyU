@@ -18,7 +18,7 @@ function ChatCtrl($timeout, User, Socket, $interval, $cordovaGeolocation, $ionic
   let posOptions = {timeout: 10000, enableHighAccuracy: false};
   let theirDbId = null;
   vmChat.theirName;
-  vmChat.myName = (ionic.Platform.platform()==='macintel') ? 'BrowserTodd' : 'mobileTodd';//User.getUser().name;
+  vmChat.myName = (ionic.Platform.platform()==='macintel') ? 'BrowserTodd' : User.getUser().name;
   vmChat.retryUserSearch = false;
   vmChat.tick = CHAT_TIME_AMOUNT;
   vmChat.distanceSelected = null;

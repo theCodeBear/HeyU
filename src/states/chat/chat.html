@@ -3,7 +3,7 @@
     <button class='button button-clear' ng-if='vmChat.chatFound' ng-click='openModal()'><i class='icon ion-person'></i></button>
     <button class='button ditch-button' ng-click='vmChat.ditchChat(true)' ng-if='vmChat.chatFound'>Ditch</button>
   </ion-nav-buttons>
-  <ion-content>
+  <ion-content class='has-footer'>
 
     <!-- Select Discovery Range -->
     <div class='chatpage-display-container' ng-if='!vmChat.distanceSelected && !vmChat.chatFound'>
@@ -32,15 +32,12 @@
 
     <!-- Person found, chat template -->
     <div class='h2 text-center' ng-if='vmChat.chatFound'>
-      <ul>
+      <ul class='chat-list'>
         <li ng-repeat='message in vmChat.messageHistory' class='chat-msg' ng-class='{"other-chatter": !vmChat.isThisUser(message.user), "this-chatter": vmChat.isThisUser(message.user)}'>
           {{ message.user }}
           <p class='chat-bubble'> {{ message.message}} </p>
         </li>
       </ul>
-      <form ng-submit='vmChat.sendMessage(vmChat.message)'>
-        <input type='text' ng-model='vmChat.message' style='width: 100%;' placeholder='Chat message...'>
-      </form>
     </div>
 
     <!-- No one is around template -->
@@ -52,4 +49,7 @@
     </div>
 
   </ion-content>
+  <form class='chat-form' ng-submit='vmChat.sendMessage(vmChat.message)' ng-if='vmChat.chatFound'>
+        <input type='text'  ng-model='vmChat.message' placeholder='Chat message...'>
+      </form>
 </ion-view>
